@@ -448,7 +448,7 @@ This project was hardened against a 20-point checklist, including:
 
 ## 📝 License
 
-Released under the **ISC License**. Free to use for learning and reference.
+Released under the **MIT License** — see [LICENSE](LICENSE). Free to use, modify, and share, for learning or commercial purposes, as long as the copyright notice is kept.
 
 ---
 
