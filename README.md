@@ -167,8 +167,8 @@ The app has **two parts** — `backend` and `frontend` — that run **at the sam
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/dhruvil1010/auctionary-.git
-cd auctionary-
+git clone https://github.com/dhruvil1010/auctionary.git
+cd auctionary
 ```
 
 ### 2. Backend — install packages
@@ -352,7 +352,7 @@ Read these before reporting an issue — they cover the most common setup snags:
 - **Node version matters** — use **v20.19+ or v22.12+**. Older Node will fail to run Vite 8 / Express 5.
 - **Admins aren't created by signup.** Use `npm run seed:admin` (with the `ADMIN_*` vars set) to create one.
 - **First run creates the database automatically** — MongoDB makes the `auction` database and its collections on first write; no manual DB setup needed.
-- **Cloning** creates a folder named after the repo (`auctionary-`). If you rename the repo on GitHub, adjust the clone URL/folder name accordingly.
+- **Cloning** creates a folder named `auctionary` (the repo name); all commands below assume you're inside it.
 
 ---
 
