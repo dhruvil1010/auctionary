@@ -338,6 +338,24 @@ Register an account, list an item, open it in a second browser/incognito window,
 
 ---
 
+## ⚠️ Assumptions & Notes
+
+Read these before reporting an issue — they cover the most common setup snags:
+
+- **Two terminals run at once** — the backend (`:8000`) and the frontend (`:5173`) are separate processes; start both.
+- **MongoDB must be running and reachable before you start the backend.** The server intentionally **exits** if it can't connect. For local Mongo, make sure the service is started; for Atlas, whitelist your IP under **Network Access**.
+- **Cloudinary is required to create listings.** Listing an item uploads an image, so valid Cloudinary credentials are needed for that flow. Browsing, auth, and bidding work without it, but you can't create an auction until it's set.
+- **`MONGODB_URI` must be the base URI only** — no trailing slash, database name, or `?query` string. The app appends the database name `/auction` itself.
+- **JWT secrets must be ≥ 32 characters and different from each other**, or the server refuses to boot (this is a deliberate safety check, not a bug).
+- **Run each part from its own folder** — backend commands from `backend/`, frontend from `frontend/`. (The temporary upload path `public/temp` is resolved relative to `backend/`.)
+- **Default ports are 8000 (API) and 5173 (frontend).** If you change either, update `CORS_ORIGIN` (backend `.env`) and `VITE_API_URL` / `VITE_SOCKET_URL` (frontend `.env`) to match, or requests will be blocked by CORS.
+- **Node version matters** — use **v20.19+ or v22.12+**. Older Node will fail to run Vite 8 / Express 5.
+- **Admins aren't created by signup.** Use `npm run seed:admin` (with the `ADMIN_*` vars set) to create one.
+- **First run creates the database automatically** — MongoDB makes the `auction` database and its collections on first write; no manual DB setup needed.
+- **Cloning** creates a folder named after the repo (`auctionary-`). If you rename the repo on GitHub, adjust the clone URL/folder name accordingly.
+
+---
+
 ## 🔑 Environment Variables Reference
 
 ### Backend (`backend/.env`)
@@ -394,16 +412,21 @@ Base path: `http://localhost:8000/api/v1`
 | `POST` | `/users/logout` | ✅ | Log out (invalidates session) |
 | `POST` | `/users/refresh-token` | cookie | Get a new access token |
 | `GET`  | `/users/current-user` | ✅ | Current logged-in user |
+| `GET`  | `/users/profile` | ✅ | Your bids, wins, losses & listings |
 | `GET`  | `/auctions` | — | List auctions (search, filters, pagination) |
 | `POST` | `/auctions` | ✅ | Create an auction (multipart image upload) |
+| `GET`  | `/auctions/my` | ✅ | The logged-in seller's own auctions |
 | `GET`  | `/auctions/:id` | — | Auction details |
-| `GET`  | `/auctions/me/profile` | ✅ | Your bids, wins, losses, listings |
 | `POST` | `/bids` | ✅ | Place a bid |
 | `POST` | `/bids/buyout` | ✅ | Buy now (instant win) |
 | `GET`  | `/bids/:auctionId` | — | Bid history for an auction |
-| `GET`  | `/admin/...` | ✅ admin | Stats, manage users & auctions |
+| `GET`  | `/admin/stats` | ✅ admin | Dashboard stats |
+| `GET`  | `/admin/users` | ✅ admin | List users |
+| `DELETE` | `/admin/users/:id` | ✅ admin | Delete a user |
+| `GET`  | `/admin/auctions` | ✅ admin | List all auctions |
+| `DELETE` | `/admin/auctions/:id` | ✅ admin | Delete an auction |
 
-> Real-time events (Socket.io): `bid:new`, `outbid`, `auction:ended`, `won`.
+> **Real-time events (Socket.io):** the client emits `auction:join` / `auction:leave`; the server emits `bid:new`, `auction:outbid`, `auction:ended`, `auction:won`, `auction:participants` (live viewer count) and `auction:started`.
 
 ---
 
