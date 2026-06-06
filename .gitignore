@@ -1,0 +1,26 @@
+# Root-level safety net. Each app (backend/, frontend/) also has its own .gitignore;
+# these patterns are belt-and-suspenders so secrets can never slip through.
+
+# Dependencies
+node_modules/
+
+# Environment variables — NEVER commit real secrets (templates are kept)
+.env
+.env.*
+!.env.sample
+
+# Build output
+dist/
+dist-ssr/
+build/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

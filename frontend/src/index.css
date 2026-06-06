@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+/* ---- Design tokens (Catawiki-inspired, simple) ----
+   In Tailwind v4 these generate utilities automatically, e.g.
+   --color-brand -> bg-brand / text-brand / border-brand
+   --font-heading -> font-heading                                    */
+@theme {
+  --color-brand: #0e7a6b; /* deep teal — primary */
+  --color-brand-dark: #0b5e52; /* hover/darker teal */
+  --color-accent: #f25c2a; /* warm coral — CTAs / urgency */
+  --color-ink: #1f2937; /* main text */
+  --color-surface: #ffffff; /* cards */
+  --color-page: #f7f6f2; /* warm off-white background */
+  --color-border: #e7e5e1; /* hairline borders */
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-heading: "Playfair Display", Georgia, serif;
+}
+
+/* ---- Night mode ----
+   When <html> has the .dark class, we simply re-point the SAME design tokens at a
+   dark palette. Because every component is built on these tokens (bg-surface,
+   text-ink, border-border, …), the whole app flips automatically — no per-page
+   changes needed. Toggling the class on/off switches between day and night. */
+.dark {
+  --color-ink: #e7e9ee; /* main text (light) */
+  --color-surface: #1a212e; /* cards / navbar */
+  --color-page: #11161f; /* page background */
+  --color-border: #2b3442; /* hairline borders */
+  --color-brand: #1aa897; /* brighter teal so links/pills stay readable */
+  --color-brand-dark: #15897b;
+  --color-accent: #ff6a3d; /* slightly brighter coral */
+}
+
+/* ---- base ---- */
+html {
+  font-family: var(--font-sans);
+}
+
+body {
+  margin: 0;
+  background: var(--color-page);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  /* gentle fade when switching between day and night */
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
